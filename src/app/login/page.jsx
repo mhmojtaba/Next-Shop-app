@@ -1,49 +1,168 @@
 "use client";
 
-import Button from "@/common/button";
-import TextField from "@/common/textField";
-import http from "@/services/httpService";
-import React, { useState } from "react";
+import { checkOtp, getOtp, getUserProfile } from "@/services/authService";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import SendOtp from "./SendOtp";
+import CheckOtp from "./CheckOtp";
+import { useRouter } from "next/navigation";
 
+const ReSendOtp = 90;
 function Login() {
-  const [inputValue, setInputValue] = useState("");
-  const submitHandler = async (e) => {
+  const router = useRouter();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [step, setStep] = useState(1);
+  const [otp, setOtp] = useState("");
+  const [time, setTime] = useState(ReSendOtp);
+
+  useEffect(() => {
+    const timer =
+      time > 0 && setInterval(() => setTime((time) => time - 1), 1000);
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [time]);
+  //
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutateAsync: mutateGetOtp,
+  } = useMutation({
+    mutationFn: getOtp,
+  });
+  const { mutateAsync: mutateCheckOtp, isLoading: isChecking } = useMutation({
+    mutationFn: checkOtp,
+  });
+  //
+  const { data: userData } = useQuery({
+    queryKey: ["get-user"],
+    queryFn: getUserProfile,
+    refetchOnWindowFocus: true,
+    retry: false,
+  });
+  //
+  const user = userData?.data?.data?.user || {};
+  useEffect(() => {
+    if (userData && user) router.push("/profile");
+  }, [user]);
+  //
+  const phoneNumberHandler = (e) => {
+    setPhoneNumber(e.target.value);
+  };
+  //
+  const sendOTPHandler = async (e) => {
     e.preventDefault();
-    console.log(inputValue);
+    setStep(2);
+    setTime(ReSendOtp);
     try {
-      const data = await http.post("/user/get-otp", {
-        phoneNumber: inputValue,
-      });
-      setInputValue("");
-      console.log(data);
+      const { data } = await mutateGetOtp({ phoneNumber });
+      setPhoneNumber("");
+      // setStep(2);
+      setTime(ReSendOtp);
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      // console.log(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message, {
+        duration: 3000,
+      });
     }
   };
+  //
+  const checkOTPHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await mutateCheckOtp({ phoneNumber, otp });
+      console.log(data.data.user.isActive);
+      toast.success(data?.data?.message);
+      if (data.data.user.isActive) {
+        router.push("/");
+      } else {
+        router.push("/complete-profile");
+      }
+    } catch (err) {
+      // console.log(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message, {
+        duration: 3000,
+      });
+    }
+  };
+  //
+  const backHandler = () => {
+    setStep(1);
+    setTime(ReSendOtp);
+  };
+
+  //
+  // const stepHandler = () => {
+  //   switch (step) {
+  //     case 1:
+  //       return (
+  //         <>
+  //           <h2>Login Form</h2>
+  //           <SendOtp
+  //             onSubmit={sendOTPHandler}
+  //             phoneNumber={phoneNumber}
+  //             onChange={phoneNumberHandler}
+  //             isLoading={isLoading}
+  //           />
+  //         </>
+  //       );
+  //       break;
+  //     case 2:
+  //       return (
+  //         <CheckOtp
+  //           isLoading={isLoading}
+  //           onSubmit={checkOTPHandler}
+  //           otp={otp}
+  //           setOtp={setOtp}
+  //           setStep={setStep}
+  //           time={time}
+  //           resendOtp={sendOTPHandler}
+  //         />
+  //       );
+  //       break;
+  //     default:
+  //       return null;
+  //       break;
+  //   }
+  // };
+
+  // console.log({ data, error, isLoading });
 
   return (
     <div className=" flex flex-col gap-y-10 items-center justify-start mt-36">
-      <h2>Login Form</h2>
-      <form
-        onSubmit={submitHandler}
-        className="border border-gray-600 px-4 py-8 rounded-lg"
+      <div
+        className={`flex flex-col gap-y-6 items-start ${
+          user ? "opacity-20 blur-3xl" : " opacity-100 blur-none"
+        }`}
       >
-        <div className="flex flex-col gap-y-6 items-start">
-          <div>
-            <TextField
-              lable="Enter Your Phone"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              id="phone"
-              name="phoneNumber"
-              type="phone"
+        {/* {stepHandler()} */}
+        {step === 1 ? (
+          <>
+            <h2>Login Form</h2>
+            <SendOtp
+              onSubmit={sendOTPHandler}
+              phoneNumber={phoneNumber}
+              onChange={phoneNumberHandler}
+              isLoading={isLoading}
             />
-          </div>
-          <div className="mx-auto">
-            <Button type="submit" value="Enter" />
-          </div>
-        </div>
-      </form>
+          </>
+        ) : (
+          <CheckOtp
+            isChecking={isChecking}
+            onSubmit={checkOTPHandler}
+            otp={otp}
+            setOtp={setOtp}
+            setStep={setStep}
+            time={time}
+            resendOtp={sendOTPHandler}
+            backHandler={backHandler}
+          />
+        )}
+      </div>
     </div>
   );
 }

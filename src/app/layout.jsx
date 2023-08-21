@@ -1,6 +1,8 @@
-import Link from "next/link";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Providers from "./Providers";
+import Header from "@/components/Header";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,21 +14,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-100`}>
-        <header className="mx-auto xl:max-w-screen-2xl bg-red-300">
-          <ul className=" w-full flex justify-around items-center h-10">
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/products">Products</Link>
-            </li>
-            <li>
-              <Link href="/login">Login</Link>
-            </li>
-          </ul>
-        </header>
-        <div className="container mx-auto xl:max-w-screen-2xl">{children}</div>
+      <body
+        suppressHydrationWarning={true}
+        className={`${inter.className} bg-gray-100`}
+      >
+        <Providers>
+          <Header />
+          <Toaster position="top-right" reverseOrder={false} />
+          <div className="container mx-auto xl:max-w-screen-2xl">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
