@@ -1,6 +1,6 @@
-import "./globals.css";
+import "../globals.css";
 import { Inter } from "next/font/google";
-import Providers from "./Providers";
+import Providers from "../Providers";
 import Header from "@/components/Header";
 import { Toaster } from "react-hot-toast";
 

@@ -14,3 +14,7 @@ export function completeProfile(data) {
 export function getUserProfile() {
   return http.get("/user/profile");
 }
+
+export function logout() {
+  return http.post("/user/logout");
+}

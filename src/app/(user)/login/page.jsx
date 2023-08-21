@@ -49,6 +49,7 @@ function Login() {
   useEffect(() => {
     if (userData && user) router.push("/profile");
   }, [user]);
+  // console.log(user);
   //
   const phoneNumberHandler = (e) => {
     setPhoneNumber(e.target.value);
@@ -136,7 +137,7 @@ function Login() {
     <div className=" flex flex-col gap-y-10 items-center justify-start mt-36">
       <div
         className={`flex flex-col gap-y-6 items-start ${
-          user ? "opacity-20 blur-3xl" : " opacity-100 blur-none"
+          user.length ? "opacity-20 blur-3xl" : " opacity-100 blur-none"
         }`}
       >
         {/* {stepHandler()} */}

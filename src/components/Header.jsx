@@ -1,17 +1,12 @@
 "use client";
 
-import { getUserProfile } from "@/services/authService";
-import { useQuery } from "@tanstack/react-query";
+import { useGetUser } from "@/hooks/useAuth";
+
 import Link from "next/link";
 import React from "react";
 
 function Header() {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["get-user"],
-    queryFn: getUserProfile,
-    refetchOnWindowFocus: true,
-    retry: false,
-  });
+  const { data, error, isLoading } = useGetUser();
   //
 
   // console.log({ data, error, isLoading });
