@@ -1,57 +1,43 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import middlewareAuth from "./app/utils/middlewareAuth";
 
 export async function middleware(request) {
   const url = request.url;
   const pathname = request.nextUrl.pathname;
   console.log(request);
+  //
   if (pathname.startsWith("/profile")) {
-    let strCookie = "";
-    request.cookies.getAll().forEach((element) => {
-      strCookie += `${element?.name}=${element?.value}; `;
-    });
-
-    const { data } = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/profile`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          cookie: strCookie,
-        },
-      }
-    ).then((res) => res.json());
-    const { user } = data || {};
+    const user = await middlewareAuth(request);
     // console.log(user);
     if (!user) return NextResponse.redirect(new URL("/login", url));
   }
   //
   if (pathname.startsWith("/admin")) {
-    let strCookie = "";
-    request.cookies.getAll().forEach((element) => {
-      strCookie += `${element?.name}=${element?.value}; `;
-    });
-
-    const { data } = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/profile`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          cookie: strCookie,
-        },
-      }
-    ).then((res) => res.json());
-
-    const { user } = data || {};
+    const user = await middlewareAuth(request);
     //
     if (!user) return NextResponse.redirect(new URL("/login", url));
     //
     if (user && user.role !== "ADMIN")
       return NextResponse.redirect(new URL("/profile", url));
   }
+  //
+  if (pathname.startsWith("/login")) {
+    const user = await middlewareAuth(request);
+    if (user) return NextResponse.redirect(new URL("/profile", url));
+  }
+  //
+  if (pathname.startsWith("/complete-profile")) {
+    const user = await middlewareAuth(request);
+    if (user) return NextResponse.redirect(new URL("/profile", url));
+  }
 }
 
 //
 export const config = {
-  matcher: ["/profile/:path*", "/admin/:path*"],
+  matcher: [
+    "/profile/:path*",
+    "/admin/:path*",
+    "/login/:path*",
+    "/complete-profile/:path*",
+  ],
 };
