@@ -14,5 +14,6 @@ export default async function middlewareAuth(request) {
     }
   ).then((res) => res.json());
   const { user } = data || {};
+  // console.log(user);
   return user;
 }

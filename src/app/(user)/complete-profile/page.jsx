@@ -26,9 +26,9 @@ function Profile() {
   });
   //
   const user = userData?.data?.data?.user || {};
-  useEffect(() => {
-    if (userData && user) router.push("/profile");
-  }, [user]);
+  // useEffect(() => {
+  //   if (userData && user && user.isActive) router.push("/profile");
+  // }, [user]);
   // console.log();
 
   //
@@ -44,6 +44,7 @@ function Profile() {
       toast.success(message, {
         duration: 3000,
       });
+      document.location.href = "/";
       router.push("/");
     } catch (err) {
       // console.log(err?.response?.data?.message);
@@ -62,7 +63,7 @@ function Profile() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={` flex flex-col gap-y-4 ${
-          user ? "opacity-20 blur-3xl" : " opacity-100 blur-none"
+          user.length ? "opacity-20 blur-3xl" : " opacity-100 blur-none"
         }`}
       >
         <label>Name</label>

@@ -78,7 +78,7 @@ function Login() {
       const { data } = await mutateCheckOtp({ phoneNumber, otp });
       console.log(data.data.user.isActive);
       toast.success(data?.data?.message);
-      if (data.data.user.isActive) {
+      if (data?.data?.user?.isActive) {
         router.push("/");
       } else {
         router.push("/complete-profile");

@@ -21,9 +21,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <Header />
           <Toaster position="top-right" reverseOrder={false} />
-          <div className="container mx-auto xl:max-w-screen-2xl">
-            {children}
-          </div>
+          <div className="container mx-auto xl:max-w-screen-xl">{children}</div>
         </Providers>
       </body>
     </html>

@@ -28,7 +28,10 @@ export async function middleware(request) {
   //
   if (pathname.startsWith("/complete-profile")) {
     const user = await middlewareAuth(request);
-    if (user) return NextResponse.redirect(new URL("/profile", url));
+    // console.log(user);
+    if (!user) return NextResponse.redirect(new URL("/login", url));
+    if (user && user.isActive)
+      return NextResponse.redirect(new URL("/profile", url));
   }
 }
 
