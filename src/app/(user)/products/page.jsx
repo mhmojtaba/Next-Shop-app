@@ -3,11 +3,20 @@ import { getProducts } from "@/services/productService";
 import React from "react";
 import CategorySide from "./CategorySide";
 import queryString from "query-string";
+export const dynamic = "force-dynamic";
 
 async function Products({ searchParams }) {
   const params = queryString.stringify(searchParams);
-  const { products } = await getProducts(params);
-  const { categories } = await getCategories();
+  // const { products } = await getProducts(params);
+  // const { categories } = await getCategories();
+
+  // getting data via parallel data fetching
+  const productPromise = getProducts(params);
+  const categoryPromise = getCategories();
+  const [{ products }, { categories }] = await Promise.all([
+    productPromise,
+    categoryPromise,
+  ]);
   // console.log(queryString.stringify(searchParams));
   return (
     <div>
