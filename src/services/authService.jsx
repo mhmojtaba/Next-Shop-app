@@ -13,7 +13,11 @@ export function completeProfile(data) {
 }
 
 export function getUserProfile() {
-  return http.get("/user/profile");
+  return http.get("/user/profile").then(({ data }) => data.data);
+}
+
+export function getAllUsers() {
+  return http.get("/admin/user/list").then(({ data }) => data.data);
 }
 
 export function logout() {

@@ -10,6 +10,8 @@ app.interceptors.request.use(
   (err) => Promise.reject(err)
 );
 
+// getting access token when refresh token is available without requesting user to login
+// if there is no refresh token the app wont request for access token too much
 app.interceptors.response.use(
   (res) => res,
   async (err) => {

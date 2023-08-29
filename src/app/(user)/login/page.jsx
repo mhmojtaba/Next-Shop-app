@@ -1,12 +1,13 @@
 "use client";
 
-import { checkOtp, getOtp, getUserProfile } from "@/services/authService";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { checkOtp, getOtp } from "@/services/authService";
+import { useMutation } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import SendOtp from "./SendOtp";
 import CheckOtp from "./CheckOtp";
 import { useRouter } from "next/navigation";
+import { useGetUser } from "@/hooks/useAuth";
 
 const ReSendOtp = 90;
 function Login() {
@@ -38,12 +39,7 @@ function Login() {
     mutationFn: checkOtp,
   });
   //
-  const { data: userData } = useQuery({
-    queryKey: ["get-user"],
-    queryFn: getUserProfile,
-    refetchOnWindowFocus: true,
-    retry: false,
-  });
+  const { data: userData } = useGetUser();
   //
   const user = userData?.data?.data?.user || {};
   useEffect(() => {

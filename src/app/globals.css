@@ -16,6 +16,16 @@
   }
 }
 
+.table_th {
+  @apply font-medium p-3 pr-8 pb-3 border-b-2 text-right;
+}
+.table_td {
+  @apply p-3 pr-8 pb-3 border-b text-right;
+}
+.table__td {
+  @apply p-3 pr-8 pb-3 border-b text-center;
+}
+
 body {
   /* color: rgb(var(--foreground-rgb));
   background: linear-gradient(

@@ -4,7 +4,7 @@ import { logout } from "@/services/authService";
 import Link from "next/link";
 import React from "react";
 
-function Sidebar() {
+function AdminSidebar() {
   const logoutHandler = async () => {
     await logout();
     localStorage.removeItem("userInfo");
@@ -19,10 +19,22 @@ function Sidebar() {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/profile/dashboard">dashboard</Link>
+          <Link href="/admin/dashboard">dashboard</Link>
         </li>
         <li>
-          <Link href="/profile/orders">Orders</Link>
+          <Link href="/admin/users">users</Link>
+        </li>
+        <li>
+          <Link href="/admin/products">products</Link>
+        </li>
+        <li>
+          <Link href="/admin/categories">categories</Link>
+        </li>
+        <li>
+          <Link href="/admin/coupons">coupons</Link>
+        </li>
+        <li>
+          <Link href="/admin/payments">payments</Link>
         </li>
         <li>
           <button
@@ -37,4 +49,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default AdminSidebar;

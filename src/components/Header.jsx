@@ -8,8 +8,8 @@ import React from "react";
 function Header() {
   const { data, error, isLoading } = useGetUser();
   //
-
-  // console.log({ data, error, isLoading });
+  const { user } = data || {};
+  // console.log(user);
   return (
     <header
       className={`mx-auto xl:max-w-screen-2xl bg-red-300 transition-all duration-100 ${
@@ -27,7 +27,7 @@ function Header() {
           <Link href="/cart">
             cart
             <span className="ml-2 text-white text-sm absolute -top-1 -right-3">
-              {data && data?.data?.data?.cart?.payDetail?.orderItems.length}
+              {data && data?.cart?.payDetail?.orderItems.length}
             </span>
           </Link>
         </li>
@@ -36,7 +36,7 @@ function Header() {
         </li>
         {data ? (
           <Link href="/profile">
-            <span>{data?.data?.data?.user?.name || "new user"}</span>
+            <span>{user?.name || "new user"}</span>
           </Link>
         ) : (
           <li>
