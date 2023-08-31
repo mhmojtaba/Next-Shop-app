@@ -160,6 +160,44 @@ export const adminPaymentListTableTHeads = [
     label: "مشاهده",
   },
 ];
+export const adminPaymentDetailTableTHeads = [
+  {
+    id: 1,
+    label: "#",
+  },
+  {
+    id: 2,
+    label: "شماره فاکتور",
+  },
+  {
+    id: 3,
+    label: "توضیحات",
+  },
+  {
+    id: 4,
+    label: "کاربر",
+  },
+  {
+    id: 5,
+    label: "محصولات",
+  },
+  {
+    id: 6,
+    label: "مبلغ",
+  },
+  {
+    id: 7,
+    label: "تاریخ",
+  },
+  {
+    id: 8,
+    label: "کوپن",
+  },
+  {
+    id: 9,
+    label: "وضعیت",
+  },
+];
 
 export const couponListTableTHeads = [
   {
@@ -196,6 +234,10 @@ export const couponListTableTHeads = [
   },
   {
     id: 10,
+    label: " وضعیت",
+  },
+  {
+    id: 11,
     label: "عملیات",
   },
 ];

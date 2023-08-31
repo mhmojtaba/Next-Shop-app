@@ -1,5 +1,5 @@
 "use client";
-import { toLocalDateString } from "@/app/utils/tolocalDate";
+import { toLocalDateString } from "@/utils/tolocalDate";
 import { useGetUser } from "@/hooks/useAuth";
 import React from "react";
 import { Blocks } from "react-loader-spinner";
