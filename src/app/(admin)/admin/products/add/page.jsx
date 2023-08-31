@@ -46,6 +46,8 @@ function AddProducts() {
   const formHandler = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
+
+  // console.log(formValue);
   return (
     <div className="w-full  mb-10 ">
       <h1 className="mb-4 text-xl font-bold">add product</h1>

@@ -41,3 +41,9 @@ export function updateProducts({ id, value }) {
     .patch(`/admin/product/update/${id}`, value)
     .then(({ data }) => data.data);
 }
+
+export function removeProducts(id) {
+  return http
+    .delete(`/admin/product/remove/${id}`)
+    .then(({ data }) => data.data);
+}
